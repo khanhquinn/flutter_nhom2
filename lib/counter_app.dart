@@ -38,6 +38,13 @@ class _CounterAppState extends State<CounterApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+          // ===== NÚT QUAY LẠI =====
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           title: const Text('Ứng dụng Đếm số'),
           backgroundColor: Colors.blueAccent,
           centerTitle: true,

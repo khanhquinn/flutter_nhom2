@@ -39,7 +39,6 @@ class Article {
   }
 }
 
-// --- 2. MÀN HÌNH DANH SÁCH (NewsListScreen) ---
 class NewsListScreen extends StatefulWidget {
   const NewsListScreen({super.key});
 
@@ -57,7 +56,6 @@ class _NewsListScreenState extends State<NewsListScreen> {
     fetchNews();
   }
 
-  // Hàm gọi API lấy dữ liệu
   Future<void> fetchNews() async {
     try {
       final response = await http.get(Uri.parse(_apiUrl));
@@ -177,7 +175,6 @@ class _NewsListScreenState extends State<NewsListScreen> {
   }
 }
 
-// --- 3. MÀN HÌNH CHI TIẾT (NewsDetailScreen) ---
 class NewsDetailScreen extends StatelessWidget {
   final Article article;
 

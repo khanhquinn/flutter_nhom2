@@ -13,14 +13,13 @@ class ProfileScreen extends StatelessWidget {
 
   // --- HÀM XỬ LÝ ĐĂNG XUẤT ---
   void _xuLyDangXuat(BuildContext context) {
-    // Điều hướng về màn hình Login và xóa tất cả các Route trước đó
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const DangNhapScreen()),
       (Route<dynamic> route) => false,
     );
   }
 
-  // Widget helper để hiển thị từng dòng thông tin
+  // Hiển thị dòng thông tin
   Widget _buildInfoRow(String label, String value, {IconData? icon}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -45,7 +44,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // Widget helper để tạo phần tiêu đề lớn
+  // Tiêu đề phần
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, bottom: 8.0),
@@ -62,6 +61,14 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Xử lý riêng cho màu tóc + kiểu tóc (tránh lỗi)
+    String mauToc = userProfile['mau_toc'] ?? 'N/A';
+    String kieuToc = userProfile['kieu_toc'] ?? '';
+
+    String mauKieuToc = (mauToc != 'N/A')
+        ? "$mauToc (${kieuToc.isNotEmpty ? kieuToc : 'Không rõ'})"
+        : 'N/A';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Thông tin Tài khoản'),
@@ -74,13 +81,12 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // --- Gói Nội dung Cuộn được vào Expanded và SingleChildScrollView ---
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // --- THÔNG TIN CƠ BẢN ---
+                    // --- THÔNG TIN CHUNG ---
                     _buildSectionTitle('Thông tin Chung'),
                     _buildInfoRow(
                       'Họ tên',
@@ -108,7 +114,7 @@ class ProfileScreen extends StatelessWidget {
                       icon: Icons.location_on,
                     ),
 
-                    // --- THÔNG TIN CÁ NHÂN CHI TIẾT ---
+                    // --- SINH HỌC ---
                     _buildSectionTitle('Dữ liệu Sinh học'),
                     _buildInfoRow(
                       'Tuổi',
@@ -117,27 +123,30 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     _buildInfoRow(
                       'Nhóm máu',
-                      userProfile['nhom_mau']?.toString() ?? 'N/A',
+                      userProfile['nhom_mau'] ?? 'N/A',
                       icon: Icons.bloodtype,
                     ),
                     _buildInfoRow(
                       'Chiều cao',
-                      '${userProfile['chieu_cao']?.toString() ?? 'N/A'} cm',
+                      userProfile['chieu_cao'] != null
+                          ? '${userProfile['chieu_cao']} cm'
+                          : 'N/A',
                       icon: Icons.height,
                     ),
                     _buildInfoRow(
                       'Cân nặng',
-                      '${userProfile['can_nang']?.toString() ?? 'N/A'} kg',
+                      userProfile['can_nang'] != null
+                          ? '${userProfile['can_nang']} kg'
+                          : 'N/A',
                       icon: Icons.monitor_weight,
                     ),
                     _buildInfoRow(
                       'Màu tóc',
-                      '${userProfile['mau_toc']} (${userProfile['kieu_toc']})' ??
-                          'N/A',
+                      mauKieuToc,
                       icon: Icons.content_cut,
                     ),
 
-                    // --- THÔNG TIN CÔNG VIỆC ---
+                    // --- CÔNG VIỆC ---
                     _buildSectionTitle('Công việc'),
                     _buildInfoRow(
                       'Công ty',
@@ -157,15 +166,15 @@ class ProfileScreen extends StatelessWidget {
 
                     const Divider(height: 30),
 
-                    // --- ACCESS TOKEN ---
                     const Text(
-                      'Access Token (Mô phỏng - Không hiển thị trong thực tế):',
+                      'Access Token (Mô phỏng):',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: Colors.black54,
                       ),
                     ),
+
                     Container(
                       padding: const EdgeInsets.all(8),
                       width: double.infinity,
@@ -175,24 +184,23 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       child: Text(
                         accessToken,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 12,
                           fontStyle: FontStyle.italic,
                           color: Colors.black54,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ), // Khoảng cách cuối nội dung cuộn
+
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
             ),
 
-            // --- Nút Logout (Giữ cố định ở dưới cùng) ---
+            // --- NÚT ĐĂNG XUẤT ---
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(

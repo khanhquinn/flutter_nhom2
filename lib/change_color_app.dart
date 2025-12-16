@@ -14,7 +14,8 @@ class ChangeColorApp extends StatefulWidget {
 
 class _ChangeColorAppState extends State<ChangeColorApp> {
   Color _backgroundColor = Colors.purple;
-  // Hàm đổi màu ngẫu nhiên
+
+  // Đổi màu ngẫu nhiên
   void _changeColor() {
     setState(() {
       _backgroundColor = Color.fromARGB(
@@ -26,6 +27,7 @@ class _ChangeColorAppState extends State<ChangeColorApp> {
     });
   }
 
+  // Reset màu
   void _resetColor() {
     setState(() {
       _backgroundColor = Colors.purple;
@@ -38,6 +40,13 @@ class _ChangeColorAppState extends State<ChangeColorApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+          // ===== NÚT QUAY LẠI =====
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           title: const Text('Ứng dụng đổi màu'),
           backgroundColor: Colors.teal,
           centerTitle: true,

@@ -13,6 +13,7 @@ class _MyRegisterState extends State<DangKy> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
@@ -27,7 +28,6 @@ class _MyRegisterState extends State<DangKy> {
 
   void _handleRegister() {
     if (_formKey.currentState!.validate()) {
-      // Xử lý đăng ký thành công
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Đăng ký thành công!')));
@@ -40,177 +40,75 @@ class _MyRegisterState extends State<DangKy> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Header
+          // ===== HEADER CÓ NÚT QUAY LẠI =====
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [const Color(0xFF3F51B5), const Color(0xFF5C6BC0)],
+                colors: [Color(0xFF3F51B5), Color(0xFF5C6BC0)],
               ),
             ),
-            child: const SafeArea(
+            child: SafeArea(
               bottom: false,
-              child: Text(
-                'Form Đăng ký tài khoản',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+              child: Row(
+                children: [
+                  // Nút quay lại
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+
+                  // Tiêu đề
+                  const Expanded(
+                    child: Text(
+                      'Form Đăng ký tài khoản',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+
+                  // Khoảng trống cân layout
+                  const SizedBox(width: 48),
+                ],
               ),
             ),
           ),
 
-          // Form content
+          // ===== FORM =====
           Expanded(
             child: Center(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(24),
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       // Họ tên
-                      TextFormField(
+                      _buildTextField(
                         controller: _nameController,
-                        style: const TextStyle(color: Color(0xFF37474F)),
-                        decoration: InputDecoration(
-                          labelText: 'Họ tên',
-                          labelStyle: const TextStyle(color: Color(0xFF37474F)),
-                          hintText: 'Vui lòng nhập họ tên',
-                          hintStyle: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 12,
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.person_outline,
-                            size: 20,
-                            color: Color(0xFF37474F),
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xFFB2DFDB).withOpacity(0.3),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 12,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          errorStyle: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 11,
-                            height: 0.8,
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Vui lòng nhập họ tên';
-                          }
-                          return null;
-                        },
+                        label: 'Họ tên',
+                        hint: 'Vui lòng nhập họ tên',
+                        icon: Icons.person_outline,
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Vui lòng nhập họ tên'
+                            : null,
                       ),
                       const SizedBox(height: 16),
 
                       // Email
-                      TextFormField(
+                      _buildTextField(
                         controller: _emailController,
-                        style: const TextStyle(color: Color(0xFF37474F)),
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          labelStyle: const TextStyle(color: Color(0xFF37474F)),
-                          hintText: 'Vui lòng nhập email',
-                          hintStyle: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 12,
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.email_outlined,
-                            size: 20,
-                            color: Color(0xFF37474F),
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xFFB2DFDB).withOpacity(0.3),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 12,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          errorStyle: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 11,
-                            height: 0.8,
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
+                        label: 'Email',
+                        hint: 'Vui lòng nhập email',
+                        icon: Icons.email_outlined,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Vui lòng nhập email';
@@ -224,84 +122,16 @@ class _MyRegisterState extends State<DangKy> {
                       const SizedBox(height: 16),
 
                       // Mật khẩu
-                      TextFormField(
+                      _buildPasswordField(
                         controller: _passwordController,
-                        obscureText: !_isPasswordVisible,
-                        style: const TextStyle(color: Color(0xFF37474F)),
-                        decoration: InputDecoration(
-                          labelText: 'Mật khẩu',
-                          labelStyle: const TextStyle(color: Color(0xFF37474F)),
-                          hintText: 'Vui lòng nhập mật khẩu',
-                          hintStyle: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 12,
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.lock_outline,
-                            size: 20,
-                            color: Color(0xFF37474F),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isPasswordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              size: 20,
-                              color: const Color(0xFF37474F),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xFFB2DFDB).withOpacity(0.3),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 12,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          errorStyle: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 11,
-                            height: 0.8,
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
+                        label: 'Mật khẩu',
+                        hint: 'Vui lòng nhập mật khẩu',
+                        isVisible: _isPasswordVisible,
+                        onToggle: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Vui lòng nhập mật khẩu';
@@ -315,85 +145,17 @@ class _MyRegisterState extends State<DangKy> {
                       const SizedBox(height: 16),
 
                       // Xác nhận mật khẩu
-                      TextFormField(
+                      _buildPasswordField(
                         controller: _confirmPasswordController,
-                        obscureText: !_isConfirmPasswordVisible,
-                        style: const TextStyle(color: Color(0xFF37474F)),
-                        decoration: InputDecoration(
-                          labelText: 'Xác nhận mật khẩu',
-                          labelStyle: const TextStyle(color: Color(0xFF37474F)),
-                          hintText: 'Vui lòng xác nhận mật khẩu',
-                          hintStyle: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 12,
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.lock_outline,
-                            size: 20,
-                            color: Color(0xFF37474F),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isConfirmPasswordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              size: 20,
-                              color: const Color(0xFF37474F),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _isConfirmPasswordVisible =
-                                    !_isConfirmPasswordVisible;
-                              });
-                            },
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xFFB2DFDB).withOpacity(0.3),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 12,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          errorStyle: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 11,
-                            height: 0.8,
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF37474F),
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
+                        label: 'Xác nhận mật khẩu',
+                        hint: 'Vui lòng xác nhận mật khẩu',
+                        isVisible: _isConfirmPasswordVisible,
+                        onToggle: () {
+                          setState(() {
+                            _isConfirmPasswordVisible =
+                                !_isConfirmPasswordVisible;
+                          });
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Vui lòng xác nhận mật khẩu';
@@ -406,7 +168,7 @@ class _MyRegisterState extends State<DangKy> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Nút Đăng ký
+                      // Nút đăng ký
                       ElevatedButton.icon(
                         onPressed: _handleRegister,
                         icon: const Icon(Icons.person_add, size: 18),
@@ -435,6 +197,61 @@ class _MyRegisterState extends State<DangKy> {
           ),
         ],
       ),
+    );
+  }
+
+  // ===== TEXT FIELD DÙNG CHUNG =====
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required IconData icon,
+    required String? Function(String?) validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      style: const TextStyle(color: Color(0xFF37474F)),
+      decoration: _inputDecoration(label, hint, icon),
+      validator: validator,
+    );
+  }
+
+  // ===== PASSWORD FIELD =====
+  Widget _buildPasswordField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required bool isVisible,
+    required VoidCallback onToggle,
+    required String? Function(String?) validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: !isVisible,
+      style: const TextStyle(color: Color(0xFF37474F)),
+      decoration: _inputDecoration(label, hint, Icons.lock_outline).copyWith(
+        suffixIcon: IconButton(
+          icon: Icon(
+            isVisible ? Icons.visibility : Icons.visibility_off,
+            color: const Color(0xFF37474F),
+          ),
+          onPressed: onToggle,
+        ),
+      ),
+      validator: validator,
+    );
+  }
+
+  // ===== DECORATION CHUNG =====
+  InputDecoration _inputDecoration(String label, String hint, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      prefixIcon: Icon(icon, size: 20),
+      filled: true,
+      fillColor: const Color(0xFFB2DFDB).withOpacity(0.3),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
     );
   }
 }
